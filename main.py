@@ -18,7 +18,9 @@ def main():
             command_name, args = parser.parse_row_command()
             validate_command_name(command_name)
             client = get_client(args, clients)
-            do_command(client, command_name, args)
+
+            if info := do_command(client, command_name, args):
+                logging.info(info)
 
         except exceptions.MissedCommandName as ex:
             logging.error(ex.__doc__)
