@@ -38,12 +38,18 @@ class BankStatementTable:
         ]
 
     def __get_total_line(self):
+        total = map(
+            self.__format_amount,
+            (
+                self.__total_withdraw,
+                self.__total_deposit,
+                self.__total_balance,
+            ),
+        )
+
         return [
             '', 'Totals',
-            *(self.__format_amount(amount) for amount in
-              (self.__total_withdraw, self.__total_deposit,
-               self.__total_balance)
-              ),
+            *total,
         ]
 
     def get(self, since: datetime, till: datetime) -> str:
