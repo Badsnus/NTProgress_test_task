@@ -2,8 +2,8 @@ from datetime import datetime
 
 from tabulate import tabulate
 
-from client import Operation
-from loader import OperationTypes, TABLE_PRINT_TYPE
+from src.client import Operation
+from src.loader import OperationTypes, TABLE_PRINT_TYPE
 
 
 class BankStatementTable:

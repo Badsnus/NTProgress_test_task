@@ -1,7 +1,7 @@
 import re
 
-from exceptions import MissedCommandName
-from regex_patterns import (
+from src.exceptions import MissedCommandName
+from src.regex_patterns import (
     COMMAND_NAME_PATTERN,
     FLOAT_ARGUMENTS_PATTERN,
     STRING_ARGUMENTS_PATTERN,

@@ -2,23 +2,23 @@ import datetime
 
 import pytest
 
-import loader
-from client import Client, Operation, OperationTypes
-from command_parser import RowCommandParser
-from exceptions import (
+from src import loader
+from src.client import Client, Operation, OperationTypes
+from src.command_parser import RowCommandParser
+from src.exceptions import (
     DepositAmountShouldBeNumber,
     InvalidDateFormat,
     MissedClientName,
     MissedCommandName,
     UnknownCommand,
 )
-from get_client import get_client
-from validators import (
+from src.get_client import get_client
+from src.validators import (
     validate_amount,
     validate_command_name,
     validate_date,
 )
-from statement_table import BankStatementTable
+from src.statement_table import BankStatementTable
 
 
 class TestRowCommandParser:

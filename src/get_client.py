@@ -1,5 +1,5 @@
-from client import Client
-from exceptions import MissedClientName
+from src.client import Client
+from src.exceptions import MissedClientName
 
 
 def get_client(args: dict[str], clients: dict[Client]) -> Client:

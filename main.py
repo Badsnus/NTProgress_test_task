@@ -1,10 +1,10 @@
 import logging
 
-import exceptions
-from command_parser import RowCommandParser
-from do_command import do_command
-from get_client import get_client
-from validators import validate_command_name
+from src import exceptions
+from src.command_parser import RowCommandParser
+from src.do_command import do_command
+from src.get_client import get_client
+from src.validators import validate_command_name
 
 
 def main():

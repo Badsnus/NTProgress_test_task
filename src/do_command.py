@@ -1,7 +1,7 @@
-from client import Client
-from loader import CommandsList
-from statement_table import BankStatementTable
-from validators import validate_amount, validate_date
+from src.client import Client
+from src.loader import CommandsList
+from src.statement_table import BankStatementTable
+from src.validators import validate_amount, validate_date
 
 
 def do_command(client: Client,

@@ -2,7 +2,7 @@ from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime
 
-from loader import OperationTypes
+from src.loader import OperationTypes
 
 
 @dataclass
