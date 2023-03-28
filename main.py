@@ -1,3 +1,5 @@
+import logging
+
 import exceptions
 from command_parser import RowCommandParser
 from do_command import do_command
@@ -6,8 +8,7 @@ from validators import validate_command_name
 
 
 def main():
-    print('Service started!')
-
+    logging.info('Service started!')
     clients = {}
 
     while True:
@@ -20,19 +21,24 @@ def main():
             do_command(client, command_name, args)
 
         except exceptions.MissedCommandName as ex:
-            print(ex.__doc__)
+            logging.error(ex.__doc__)
         except exceptions.UnknownCommand as ex:
-            print(ex.__doc__)
+            logging.error(ex.__doc__)
         except exceptions.MissedClientName as ex:
-            print(ex.__doc__)
+            logging.error(ex.__doc__)
         except exceptions.DepositAmountShouldBeNumber as ex:
-            print(ex.__doc__)
+            logging.error(ex.__doc__)
         except exceptions.InvalidDateFormat as ex:
-            print(ex.__doc__)
+            logging.error(ex.__doc__)
         except KeyboardInterrupt:
-            print('Game over')
+            logging.info('Game over')
             break
 
 
 if __name__ == '__main__':
+    logging.basicConfig(
+        format='%(asctime)s - %(message)s',
+        level=logging.INFO,
+        datefmt='%Y-%m-%d %H:%M:%S',
+    )
     main()
