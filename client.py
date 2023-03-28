@@ -1,7 +1,6 @@
+from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime
-
-from tabulate import tabulate
 
 
 @dataclass
@@ -20,8 +19,12 @@ class Client:
         self.__operations: list[Operation] = []
 
     @property
-    def balance(self):
+    def balance(self) -> float:
         return self.__balance
+
+    @property
+    def operations(self):
+        return deepcopy(self.__operations)
 
     def __add_operation(self, operation_name: str, amount: float,
                         description: str) -> None:
@@ -32,10 +35,6 @@ class Client:
             type=operation_name,
         ))
 
-    @staticmethod
-    def __format_amount(amount: float) -> str:
-        return f'${amount}'
-
     def deposit(self, amount: float, description: str) -> None:
         self.__balance += amount
         self.__add_operation('deposit', amount, description)
@@ -43,46 +42,3 @@ class Client:
     def withdraw(self, amount: float, description: str) -> None:
         self.__balance -= amount
         self.__add_operation('withdraw', amount, description)
-
-    def show_bank_statement(self, since: datetime, till: datetime) -> str:
-
-        total_withdraw = total_deposit = total_balance = 0
-
-        col_names = [
-            'Date', 'Description', 'Withdrawals', 'Deposits', 'Balance',
-        ]
-        data = [['', 'Previous balance', '', '', '$0.00']]
-        for operation in self.__operations:
-            if since > operation.date:
-                continue
-
-            if till < operation.date:
-                break
-
-            if operation.type == 'deposit':
-                total_balance += operation.amount
-                total_deposit += operation.amount
-            else:
-                total_balance -= operation.amount
-                total_withdraw += operation.amount
-
-            get_amount_for_operation = {
-                'deposit': ('', self.__format_amount(operation.amount)),
-                'withdraw': (self.__format_amount(operation.amount), ''),
-            }
-            data.append([
-                operation.date,
-                operation.description,
-                *get_amount_for_operation[operation.type],
-                self.__format_amount(total_balance),
-            ])
-
-        data.append([
-            '',
-            'Totals',
-            *(
-                self.__format_amount(amount) for amount in
-                (total_withdraw, total_deposit, total_balance)
-            ),
-        ])
-        return tabulate(data, headers=col_names, tablefmt="fancy_grid")
