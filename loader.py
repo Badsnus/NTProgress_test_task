@@ -10,5 +10,5 @@ class CommandsList(OperationTypes):
     show_bank_statement = 'show_bank_statement'
     fields = [
         OperationTypes.deposit, OperationTypes.withdraw,
-        show_bank_statement
+        show_bank_statement,
     ]

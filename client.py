@@ -21,6 +21,10 @@ class Client:
         self.__operations: list[Operation] = []
 
     @property
+    def name(self):
+        return self.__name
+
+    @property
     def balance(self) -> float:
         return self.__balance
 

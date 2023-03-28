@@ -17,15 +17,21 @@ def validate_command_name(command_name: str) -> None:
 
 def validate_amount(amount: str | None) -> float:
     try:
+        if isinstance(amount, str) and 'inf' in amount:
+            raise TypeError
+
         amount = float(amount)
-    except ValueError:
+    except (TypeError, ValueError):
         raise DepositAmountShouldBeNumber
 
     return amount
 
 
 def validate_date(date: str) -> datetime:
-    date = dateparser.parse(date)
+    try:
+        date = dateparser.parse(date)
+    except TypeError:
+        raise InvalidDateFormat
 
     if not date:
         raise InvalidDateFormat

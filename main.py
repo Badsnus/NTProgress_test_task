@@ -1,5 +1,4 @@
 import exceptions
-
 from command_parser import RowCommandParser
 from do_command import do_command
 from get_client import get_client
