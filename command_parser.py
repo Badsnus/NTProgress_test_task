@@ -1,7 +1,7 @@
 import re
 
-import exceptions
 import regex_patterns
+from exceptions import MissedCommandName
 
 
 class RowCommandParser:
@@ -18,7 +18,7 @@ class RowCommandParser:
             regex_patterns.COMMAND_NAME_PATTERN, self.row_command,
         )
         if not command_name:
-            raise exceptions.MissedCommandName
+            raise MissedCommandName
 
         command_name = str(command_name.group()).strip()
 

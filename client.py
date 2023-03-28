@@ -2,6 +2,8 @@ from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime
 
+from loader import OperationTypes
+
 
 @dataclass
 class Operation:
@@ -35,10 +37,10 @@ class Client:
             type=operation_name,
         ))
 
-    def deposit(self, amount: float, description: str) -> None:
+    def do_deposit(self, amount: float, description: str) -> None:
         self.__balance += amount
-        self.__add_operation('deposit', amount, description)
+        self.__add_operation(OperationTypes.deposit, amount, description)
 
-    def withdraw(self, amount: float, description: str) -> None:
+    def do_withdraw(self, amount: float, description: str) -> None:
         self.__balance -= amount
-        self.__add_operation('withdraw', amount, description)
+        self.__add_operation(OperationTypes.withdraw, amount, description)

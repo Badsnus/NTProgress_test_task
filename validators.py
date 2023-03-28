@@ -7,11 +7,11 @@ from exceptions import (
     DepositAmountShouldBeNumber,
     InvalidDateFormat,
 )
-from loader import COMMANDS
+from loader import CommandsList
 
 
 def validate_command_name(command_name: str) -> None:
-    if command_name not in COMMANDS:
+    if command_name not in CommandsList.fields:
         raise UnknownCommand
 
 
