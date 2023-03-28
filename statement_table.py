@@ -53,11 +53,11 @@ class BankStatementTable:
         ]
 
     def get(self, since: datetime, till: datetime) -> str:
-
         col_names = [
             'Date', 'Description', 'Withdrawals', 'Deposits', 'Balance',
         ]
         data = [['', 'Previous balance', '', '', '$0.00']]
+
         for operation in self.__operations:
             if since > operation.date:
                 continue
