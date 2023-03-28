@@ -82,10 +82,3 @@ class Client:
             ),
         ])
         return tabulate(data, headers=col_names, tablefmt="fancy_grid")
-
-
-c = Client('asd')
-c.deposit(100.0, 'dep')
-c.withdraw(50, 'withdraw')
-print(c.show_bank_statement(datetime(2020, 10, 23, 1),
-                            datetime(2025, 10, 23, 1)))
