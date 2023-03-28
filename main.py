@@ -4,8 +4,8 @@ import regex_patterns
 from exceptions import MissedCommandName
 
 
-def convert_argument_to_int(argument: tuple[str]) -> tuple[str, int]:
-    return argument[0], int(argument[1])
+def convert_argument_to_float(argument: tuple[str]) -> tuple[str, float]:
+    return argument[0], float(argument[1])
 
 
 def parse_command(row_command: str) -> tuple[str, dict[str]]:
@@ -21,8 +21,8 @@ def parse_command(row_command: str) -> tuple[str, dict[str]]:
         re.findall(regex_patterns.STRING_ARGUMENTS_PATTERN, row_command),
     )
     command_args.update(map(
-        convert_argument_to_int,
-        re.findall(regex_patterns.INT_ARGUMENTS_PATTERN, row_command),
+        convert_argument_to_float,
+        re.findall(regex_patterns.FLOAT_ARGUMENTS_PATTERN, row_command),
     ))
     return command_name, command_args
 
