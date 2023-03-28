@@ -1,13 +1,13 @@
-import dataclasses
+from dataclasses import dataclass
 from datetime import datetime
 
+import dateparser
 from tabulate import tabulate
 
 
-@dataclasses.dataclass
+@dataclass
 class Operation:
     amount: float
-    current_balance: float
     date: datetime
     description: str
     type: str
@@ -18,8 +18,6 @@ class Client:
     def __init__(self, name: str, balance: float = 0) -> None:
         self.__name: str = name
         self.__balance: float = balance
-        self.__total_deposits: float = 0
-        self.__total_withdraws: float = 0
         self.__operations: list[Operation] = []
 
     @property
@@ -30,7 +28,6 @@ class Client:
                         description: str) -> None:
         self.__operations.append(Operation(
             amount=amount,
-            current_balance=self.balance,
             description=description,
             date=datetime.now(),
             type=operation_name,
@@ -40,17 +37,29 @@ class Client:
     def __format_amount(amount: float) -> str:
         return f'${amount}'
 
+    @staticmethod
+    def convert_string_to_datetime(s: str | datetime):
+        if isinstance(s, str):
+            s = dateparser.parse(s)
+        return s
+
     def deposit(self, amount: float, description: str) -> None:
         self.__balance += amount
-        self.__total_deposits += amount
         self.__add_operation('deposit', amount, description)
 
     def withdraw(self, amount: float, description: str) -> None:
         self.__balance -= amount
-        self.__total_withdraws += amount
         self.__add_operation('withdraw', amount, description)
 
-    def show_bank_statement(self, since: datetime, till: datetime) -> str:
+    def show_bank_statement(self,
+                            since: str | datetime,
+                            till: str | datetime) -> str:
+
+        since = self.convert_string_to_datetime(since)
+        till = self.convert_string_to_datetime(till)
+
+        total_withdraw = total_deposit = total_balance = 0
+
         col_names = [
             'Date', 'Description', 'Withdrawals', 'Deposits', 'Balance',
         ]
@@ -62,6 +71,13 @@ class Client:
             if till < operation.date:
                 break
 
+            if operation.type == 'deposit':
+                total_balance += operation.amount
+                total_deposit += operation.amount
+            else:
+                total_balance -= operation.amount
+                total_withdraw += operation.amount
+
             get_amount_for_operation = {
                 'deposit': ('', self.__format_amount(operation.amount)),
                 'withdraw': (self.__format_amount(operation.amount), ''),
@@ -70,7 +86,7 @@ class Client:
                 operation.date,
                 operation.description,
                 *get_amount_for_operation[operation.type],
-                self.__format_amount(operation.current_balance),
+                self.__format_amount(total_balance),
             ])
 
         data.append([
@@ -78,7 +94,7 @@ class Client:
             'Totals',
             *(
                 self.__format_amount(amount) for amount in
-                (self.__total_withdraws, self.__total_deposits, self.balance)
+                (total_withdraw, total_deposit, total_balance)
             ),
         ])
         return tabulate(data, headers=col_names, tablefmt="fancy_grid")

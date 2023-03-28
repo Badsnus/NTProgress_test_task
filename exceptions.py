@@ -1,3 +1,10 @@
 class MissedCommandName(Exception):
-    def __init__(self, message='U need to enter the command name', *args):
-        super().__init__(message, *args)
+    """No entered the command name."""
+
+
+class MissedClientName(Exception):
+    """Didnt entered client name"""
+
+
+class UnknownCommand(Exception):
+    """Entered unknown command."""
