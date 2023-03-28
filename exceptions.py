@@ -12,3 +12,7 @@ class UnknownCommand(Exception):
 
 class DepositAmountShouldBeNumber(Exception):
     """Amount must be a number."""
+
+
+class InvalidDateFormat(Exception):
+    "Entered invalid date format"

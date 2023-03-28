@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-import dateparser
 from tabulate import tabulate
 
 
@@ -37,12 +36,6 @@ class Client:
     def __format_amount(amount: float) -> str:
         return f'${amount}'
 
-    @staticmethod
-    def convert_string_to_datetime(s: str | datetime):
-        if isinstance(s, str):
-            s = dateparser.parse(s)
-        return s
-
     def deposit(self, amount: float, description: str) -> None:
         self.__balance += amount
         self.__add_operation('deposit', amount, description)
@@ -51,12 +44,7 @@ class Client:
         self.__balance -= amount
         self.__add_operation('withdraw', amount, description)
 
-    def show_bank_statement(self,
-                            since: str | datetime,
-                            till: str | datetime) -> str:
-
-        since = self.convert_string_to_datetime(since)
-        till = self.convert_string_to_datetime(till)
+    def show_bank_statement(self, since: datetime, till: datetime) -> str:
 
         total_withdraw = total_deposit = total_balance = 0
 

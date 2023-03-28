@@ -1,9 +1,9 @@
 import re
 
-import regex_patterns
 import exceptions
+import regex_patterns
 from client import Client
-from validators import validate_amount, validate_command_name
+from validators import validate_amount, validate_command_name, validate_date
 
 
 def convert_argument_to_float(argument: tuple[str]) -> tuple[str, float]:
@@ -49,10 +49,12 @@ def make_command(client: Client, command_name: str, args: dict[str]) -> None:
     elif command_name == 'withdraw':
         amount = validate_amount(args.pop('amount', None))
         client.withdraw(amount, args.pop('description', ''))
-
         print('Withdrawal operation was successful!')
     else:
-        print(client.show_bank_statement(**args))
+        kwargs = {
+            key: validate_date(args.pop(key, '')) for key in ('since', 'till')
+        }
+        print(client.show_bank_statement(**kwargs))
 
 
 def main():
@@ -63,16 +65,19 @@ def main():
             validate_command_name(command_name)
             client = get_client(args)
             make_command(client, command_name, args)
-        except exceptions.MissedCommandName:
-            print('No entered the command name.')
-        except exceptions.UnknownCommand:
-            print('Entered unknown command.')
-        except exceptions.MissedClientName:
-            print('Did not entered a client name.')
-        except exceptions.DepositAmountShouldBeNumber:
-            print('Amount must be a number.')
-        except TypeError as ex:
-            print(ex.args)
+        except exceptions.MissedCommandName as ex:
+            print(ex.__doc__)
+        except exceptions.UnknownCommand as ex:
+            print(ex.__doc__)
+        except exceptions.MissedClientName as ex:
+            print(ex.__doc__)
+        except exceptions.DepositAmountShouldBeNumber as ex:
+            print(ex.__doc__)
+        except exceptions.InvalidDateFormat as ex:
+            print(ex.__doc__)
+        except KeyboardInterrupt:
+            print('Game over')
+            break
 
 
 if __name__ == '__main__':
