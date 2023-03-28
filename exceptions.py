@@ -3,8 +3,12 @@ class MissedCommandName(Exception):
 
 
 class MissedClientName(Exception):
-    """Didnt entered client name"""
+    """Didnt entered a client name."""
 
 
 class UnknownCommand(Exception):
     """Entered unknown command."""
+
+
+class DepositAmountShouldBeNumber(Exception):
+    """Amount must be a number."""

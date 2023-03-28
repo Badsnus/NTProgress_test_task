@@ -1,9 +1,9 @@
 import re
 
-import loader
 import regex_patterns
 import exceptions
 from client import Client
+from validators import validate_amount, validate_command_name
 
 
 def convert_argument_to_float(argument: tuple[str]) -> tuple[str, float]:
@@ -29,11 +29,6 @@ def parse_row_command(row_command: str) -> tuple[str, dict[str]]:
     return command_name, command_args
 
 
-def validate_command_name(command_name: str) -> None:
-    if command_name not in loader.COMMANDS:
-        raise exceptions.UnknownCommand
-
-
 def get_client(args: dict[str]) -> Client:
     client_name = args.pop('client', None)
     if not client_name:
@@ -47,10 +42,14 @@ def get_client(args: dict[str]) -> Client:
 
 def make_command(client: Client, command_name: str, args: dict[str]) -> None:
     if command_name == 'deposit':
-        client.deposit(**args)
+        amount = validate_amount(args.pop('amount', None))
+        client.deposit(amount, args.pop('description', ''))
+
         print('Deposit operation was successful!')
     elif command_name == 'withdraw':
-        client.withdraw(**args)
+        amount = validate_amount(args.pop('amount', None))
+        client.withdraw(amount, args.pop('description', ''))
+
         print('Withdrawal operation was successful!')
     else:
         print(client.show_bank_statement(**args))
@@ -59,10 +58,21 @@ def make_command(client: Client, command_name: str, args: dict[str]) -> None:
 def main():
     print('Service started!')
     while True:
-        command_name, args = parse_row_command(input('> ').strip())
-        validate_command_name(command_name)
-        client = get_client(args)
-        make_command(client, command_name, args)
+        try:
+            command_name, args = parse_row_command(input('> ').strip())
+            validate_command_name(command_name)
+            client = get_client(args)
+            make_command(client, command_name, args)
+        except exceptions.MissedCommandName:
+            print('No entered the command name.')
+        except exceptions.UnknownCommand:
+            print('Entered unknown command.')
+        except exceptions.MissedClientName:
+            print('Did not entered a client name.')
+        except exceptions.DepositAmountShouldBeNumber:
+            print('Amount must be a number.')
+        except TypeError as ex:
+            print(ex.args)
 
 
 if __name__ == '__main__':
