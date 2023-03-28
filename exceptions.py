@@ -15,4 +15,4 @@ class DepositAmountShouldBeNumber(Exception):
 
 
 class InvalidDateFormat(Exception):
-    "Entered invalid date format"
+    """Entered invalid date format."""
