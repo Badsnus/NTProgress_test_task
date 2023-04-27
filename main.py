@@ -17,7 +17,7 @@ def main():
 
             command_name, args = parser.parse_row_command()
             validate_command_name(command_name)
-            client = get_client(args, clients)
+            client = get_client(args.pop('client'), clients)
 
             if info := do_command(client, command_name, args):
                 logging.info(info)

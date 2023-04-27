@@ -2,8 +2,7 @@ from src.client import Client
 from src.exceptions import MissedClientName
 
 
-def get_client(args: dict[str], clients: dict[Client]) -> Client:
-    client_name = args.pop('client', None)
+def get_client(client_name: str, clients: dict[str, Client]) -> Client:
     if not client_name:
         raise MissedClientName
 
